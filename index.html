@@ -1,10 +1,24 @@
+<!--
+Autores:
+Aguilar Bueno Carlos Antonio
+Garcia Mora Maribel
+Aguilera Rangel Andre Mauricio
+Ortiz Perez Pablo Alexis
+-->
+
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es"> <!-- Documento HTML en español -->
 <head>
-  <meta charset="UTF-8" />
-  <title>Smart Mirror</title>
+  <meta charset="UTF-8" /> <!-- Codificación de caracteres en UTF-8 -->
+  <title>Smart Mirror</title> <!-- Título que aparece en la pestaña del navegador -->
+
+  <!-- Hoja de estilos externa -->
   <link rel="stylesheet" href="estilos.css" />
+
+  <!-- Librería MQTT.js desde CDN (para comunicación MQTT con JavaScript) -->
   <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
+  <!-- Estilos internos -->
   <style>
     body {
       margin: 0;
@@ -80,18 +94,22 @@
     }
   </style>
 </head>
+
 <body>
+  <!-- Encabezado con logo y título -->
   <header>
     <img src="logo.png" alt="Smart Mirror Logo" />
     <h1>Smart Mirror</h1>
   </header>
 
+  <!-- Contenido principal con tarjetas de datos -->
   <main>
     <div class="tarjeta" id="luz">💡 Luz: --</div>
     <div class="tarjeta" id="temperatura">🌡 Temperatura: -- °C</div>
     <div class="tarjeta" id="humedad">💧 Humedad: -- %</div>
   </main>
 
+  <!-- Sección para visualizar fotos tomadas por la cámara -->
   <section id="fotos-tomadas">
     <h2>Fotos tomadas</h2>
     <img id="fotoCam" src="http://192.168.1.4/capture" alt="Foto Cámara" />
@@ -99,31 +117,35 @@
     <button id="btnFoto" onclick="tomarFoto()">Tomar nueva foto</button>
   </section>
 
+  <!-- Script JavaScript para conectar vía MQTT y controlar foto -->
   <script>
-    // MQTT Setup
+    // Configuración del cliente MQTT con conexión segura (wss)
     const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
 
+    // Evento al conectarse exitosamente
     client.on('connect', () => {
       console.log('✅ Conectado a HiveMQ');
-      client.subscribe('smartmirror/#');
+      client.subscribe('smartmirror/#'); // Suscripción a todos los temas del Smart Mirror
     });
 
+    // Evento al recibir un mensaje MQTT
     client.on('message', (topic, message) => {
-      const dato = message.toString();
+      const dato = message.toString(); // Convertir el mensaje a texto
       if (topic === 'smartmirror/luz') {
-        document.getElementById('luz').innerText = 💡 Luz: ${dato};
+        document.getElementById('luz').innerText = `💡 Luz: ${dato}`;
       } else if (topic === 'smartmirror/temperatura') {
-        document.getElementById('temperatura').innerText = 🌡 Temperatura: ${dato} °C;
+        document.getElementById('temperatura').innerText = `🌡 Temperatura: ${dato} °C`;
       } else if (topic === 'smartmirror/humedad') {
-        document.getElementById('humedad').innerText = 💧 Humedad: ${dato} %;
+        document.getElementById('humedad').innerText = `💧 Humedad: ${dato} %`;
       }
     });
 
-    // Función para tomar una nueva foto y actualizar la imagen sin recargar la página
+    // Función que actualiza la imagen de la cámara sin recargar la página
     function tomarFoto() {
       const img = document.getElementById('fotoCam');
-      img.src = http://192.168.1.4/capture?rand=${Date.now()};
+      img.src = `http://192.168.1.4/capture?rand=${Date.now()}`;
     }
   </script>
 </body>
 </html>
+
