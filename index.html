@@ -112,7 +112,7 @@ Ortiz Perez Pablo Alexis
   <!-- Sección para visualizar fotos tomadas por la cámara -->
   <section id="fotos-tomadas">
     <h2>Fotos tomadas</h2>
-    <img id="fotoCam" src="http://192.168.1.4/capture" alt="Foto Cámara" />
+    <img id="fotoCam" src="http:///capture" alt="Foto Cámara" />
     <br />
     <button id="btnFoto" onclick="tomarFoto()">Tomar nueva foto</button>
   </section>
@@ -143,7 +143,7 @@ Ortiz Perez Pablo Alexis
     // Función que actualiza la imagen de la cámara sin recargar la página
     function tomarFoto() {
       const img = document.getElementById('fotoCam');
-      img.src = `http://192.168.1.4/capture?rand=${Date.now()}`;
+      img.src = `http:///capture?rand=${Date.now()}`;
     }
   </script>
 </body>
