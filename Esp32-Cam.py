@@ -5,8 +5,8 @@ import camera      # Importa el módulo específico para controlar la cámara (e
 import machine     # Importa el módulo para controlar hardware (GPIO, etc.)
 
 # --- Configuración de WiFi ---
-SSID = 'Totalplay-E5D1'               # Nombre de la red WiFi a la que se va a conectar
-PASSWORD = 'E5D1B440Pq2uLe6Q'         # Contraseña de esa red WiFi
+SSID = ''               # Nombre de la red WiFi a la que se va a conectar
+PASSWORD = ''         # Contraseña de esa red WiFi
 
 # --- Configuración del pin GPIO del flash LED ---
 flash = machine.Pin(4, machine.Pin.OUT)  # Define el pin GPIO4 como salida, para controlar el flash
