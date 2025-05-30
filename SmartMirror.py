@@ -12,8 +12,8 @@ from machine import Pin, time_pulse_us  # Control de pines GPIO y medir duració
 from umqtt.simple import MQTTClient     # Cliente MQTT para enviar datos al broker
 
 # === Configuración de red WiFi ===
-SSID = "TotaLpLay-E5D1"                        # Nombre de la red WiFi
-PASSWORD = "E5D1B440Pq2uLe6Q "                 # Contraseña de la red WiFi
+SSID = ""                        # Nombre de la red WiFi
+PASSWORD = " "                 # Contraseña de la red WiFi
 
 # === Configuración del broker MQTT ===
 MQTT_BROKER = "broker.hivemq.com"             # Dirección del broker MQTT público (HiveMQ)
