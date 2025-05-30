@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Smart Mirror</title>
+  <link rel="stylesheet" href="estilos.css" />
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #B3D8F2;
+      text-align: center;
+    }
+    header {
+      background-color: #0D3C61;
+      color: white;
+      padding: 15px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+    header img {
+      height: 60px;
+    }
+    header h1 {
+      font-size: 28px;
+      margin: 0;
+    }
+    main {
+      margin-top: 40px;
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 30px;
+    }
+    .tarjeta {
+      background-color: white;
+      border: 3px solid #2C73A8;
+      color: #0D3C61;
+      padding: 25px 40px;
+      border-radius: 15px;
+      font-size: 22px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      min-width: 220px;
+      transition: all 0.2s ease-in-out;
+    }
+    .tarjeta:hover {
+      transform: scale(1.03);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+    }
+    #fotos-tomadas {
+      margin-top: 40px;
+      max-width: 600px;
+      margin-left: auto;
+      margin-right: auto;
+      color: #0D3C61;
+    }
+    #fotoCam {
+      max-width: 100%;
+      border: 2px solid #0D3C61;
+      margin-top: 10px;
+      border-radius: 10px;
+    }
+    #btnFoto {
+      margin-top: 15px;
+      padding: 10px 25px;
+      background-color: #2C73A8;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 18px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    #btnFoto:hover {
+      background-color: #1B4F72;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <img src="logo.png" alt="Smart Mirror Logo" />
+    <h1>Smart Mirror</h1>
+  </header>
+
+  <main>
+    <div class="tarjeta" id="luz">💡 Luz: --</div>
+    <div class="tarjeta" id="temperatura">🌡 Temperatura: -- °C</div>
+    <div class="tarjeta" id="humedad">💧 Humedad: -- %</div>
+  </main>
+
+  <section id="fotos-tomadas">
+    <h2>Fotos tomadas</h2>
+    <img id="fotoCam" src="http://192.168.1.4/capture" alt="Foto Cámara" />
+    <br />
+    <button id="btnFoto" onclick="tomarFoto()">Tomar nueva foto</button>
+  </section>
+
+  <script>
+    // MQTT Setup
+    const client = mqtt.connect('wss://broker.hivemq.com:8884/mqtt');
+
+    client.on('connect', () => {
+      console.log('✅ Conectado a HiveMQ');
+      client.subscribe('smartmirror/#');
+    });
+
+    client.on('message', (topic, message) => {
+      const dato = message.toString();
+      if (topic === 'smartmirror/luz') {
+        document.getElementById('luz').innerText = 💡 Luz: ${dato};
+      } else if (topic === 'smartmirror/temperatura') {
+        document.getElementById('temperatura').innerText = 🌡 Temperatura: ${dato} °C;
+      } else if (topic === 'smartmirror/humedad') {
+        document.getElementById('humedad').innerText = 💧 Humedad: ${dato} %;
+      }
+    });
+
+    // Función para tomar una nueva foto y actualizar la imagen sin recargar la página
+    function tomarFoto() {
+      const img = document.getElementById('fotoCam');
+      img.src = http://192.168.1.4/capture?rand=${Date.now()};
+    }
+  </script>
+</body>
+</html>
